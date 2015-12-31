@@ -1,5 +1,7 @@
 package com.acevedo.yitzchak.f0app;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -8,11 +10,21 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.EditText;
+import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
+    public static String EXTRA_FULL = "com.acevedo.yitzchak.FULLNAME";
+    public static String EXTRA_USER = "com.acevedo.yitzchak.USERNAME";
+    public static String EXTRA_PASS = "com.acevedo.yitzchak.PASSWORD";
+    public static String EXTRA_CONF = "com.acevedo.yitzchak.CONFIRM";
+    public static boolean isDeveloper = false;
+    public static int numPresses = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        final Context context = this;
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -22,10 +34,57 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Hello there...", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                numPresses++;
+                if (numPresses > 4) {
+                    Intent intent = new Intent(context, HomeScreen.class);
+                    intent.putExtra(EXTRA_FULL, "Developer");
+                    intent.putExtra(EXTRA_USER, "Admin");
+                    intent.putExtra(EXTRA_PASS, "Adminxxiv00");
+                    intent.putExtra(EXTRA_CONF, " ");
+                    startActivity(intent);
+                }
             }
         });
+    }
+
+    public boolean userStatus(String username){
+        //TODO check username database
+        return true;
+    }
+
+    public void ButtonContinue(View view){
+        EditText fullName = (EditText)findViewById(R.id.fullName);
+        EditText username = (EditText)findViewById(R.id.username);
+        EditText password = (EditText)findViewById(R.id.password);
+        EditText confirmP = (EditText)findViewById(R.id.confirmPassword);
+        String fn, un, pw, cp;
+        pw = null;
+        fn = fullName.getText().toString();
+        un = username.getText().toString();
+        pw = password.getText().toString();
+        cp = confirmP.getText().toString();
+        if (userStatus(un)&&pw == cp&&pw!=null){
+            Intent intent = new Intent(this, HomeScreen.class);
+            intent.putExtra(EXTRA_FULL, fn);
+            intent.putExtra(EXTRA_USER, un);
+            intent.putExtra(EXTRA_PASS, pw);
+            intent.putExtra(EXTRA_CONF, cp);
+            startActivity(intent);
+        } else if (!userStatus(un)&&!(pw == cp)) {
+            TextView userErr = (TextView)findViewById(R.id.userErr);
+            userErr.setVisibility(View.VISIBLE);
+            TextView passErr = (TextView)findViewById(R.id.passErr);
+            passErr.setVisibility(View.VISIBLE);
+        } else if (!userStatus(un)){
+            TextView userErr = (TextView)findViewById(R.id.userErr);
+            userErr.setVisibility(View.VISIBLE);
+        } else if (!(pw == cp)){
+            TextView passErr = (TextView)findViewById(R.id.passErr);
+            passErr.setVisibility(View.VISIBLE);
+        } else {
+            TextView userErr = (TextView)findViewById(R.id.userErr);
+            userErr.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override

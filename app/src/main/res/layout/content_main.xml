@@ -55,7 +55,8 @@
         android:text="Continue"
         android:id="@+id/button"
         android:layout_alignBottom="@+id/confirmPassword"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentEnd="true"
+        android:onClick="ButtonContinue"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -110,10 +111,32 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="Welcome to the illuminati, we appreciate your company.  Please enter your information below"
+        android:text="Welcome to the illuminati, we appreciate your company.  Please enter your information below:"
         android:textStyle="bold"
         android:id="@+id/subtitle"
         android:layout_below="@+id/title"
         android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Username Taken"
+        android:id="@+id/userErr"
+        android:textColor="@color/colorError"
+        android:layout_below="@+id/fullName"
+        android:layout_toEndOf="@+id/username"
+        android:visibility="gone"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Check Password"
+        android:id="@+id/passErr"
+        android:textColor="@color/colorError"
+        android:layout_alignTop="@+id/password"
+        android:layout_toEndOf="@+id/password"
+        android:visibility="gone"/>
 
 </RelativeLayout>
