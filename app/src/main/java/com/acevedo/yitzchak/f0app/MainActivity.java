@@ -40,16 +40,21 @@ public class MainActivity extends AppCompatActivity {
                     intent.putExtra(EXTRA_FULL, "Developer");
                     intent.putExtra(EXTRA_USER, "Admin");
                     intent.putExtra(EXTRA_PASS, "Adminxxiv00");
-                    intent.putExtra(EXTRA_CONF, " ");
+                    intent.putExtra(EXTRA_CONF, "thisPass");
                     startActivity(intent);
+                    isDeveloper = true;
                 }
             }
         });
     }
 
-    public boolean userStatus(String username){
+    private static boolean userStatus(String username){
         //TODO check username database
-        return true;
+        if (!username.equals("yitzchak")){
+            return true;
+        }
+        else
+            return false;
     }
 
     public void ButtonContinue(View view){
@@ -58,19 +63,19 @@ public class MainActivity extends AppCompatActivity {
         EditText password = (EditText)findViewById(R.id.password);
         EditText confirmP = (EditText)findViewById(R.id.confirmPassword);
         String fn, un, pw, cp;
-        pw = null;
+        pw = " ";
         fn = fullName.getText().toString();
         un = username.getText().toString();
         pw = password.getText().toString();
         cp = confirmP.getText().toString();
-        if (userStatus(un)&&pw == cp&&pw!=null){
+        if (userStatus(un)&&pw.equals(cp)&&!pw.equals(" ")){
             Intent intent = new Intent(this, HomeScreen.class);
             intent.putExtra(EXTRA_FULL, fn);
             intent.putExtra(EXTRA_USER, un);
             intent.putExtra(EXTRA_PASS, pw);
             intent.putExtra(EXTRA_CONF, cp);
             startActivity(intent);
-        } else if (!userStatus(un)&&!(pw == cp)) {
+        } else if (!userStatus(un)&&!pw.equals(cp)) {
             TextView userErr = (TextView)findViewById(R.id.userErr);
             userErr.setVisibility(View.VISIBLE);
             TextView passErr = (TextView)findViewById(R.id.passErr);
@@ -78,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
         } else if (!userStatus(un)){
             TextView userErr = (TextView)findViewById(R.id.userErr);
             userErr.setVisibility(View.VISIBLE);
-        } else if (!(pw == cp)){
+        } else if (!pw.equals(cp)){
             TextView passErr = (TextView)findViewById(R.id.passErr);
             passErr.setVisibility(View.VISIBLE);
         } else {
