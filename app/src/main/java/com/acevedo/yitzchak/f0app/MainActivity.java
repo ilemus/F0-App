@@ -2,6 +2,7 @@ package com.acevedo.yitzchak.f0app;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -13,6 +14,10 @@ import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.google.android.gms.appindexing.Action;
+import com.google.android.gms.appindexing.AppIndex;
+import com.google.android.gms.common.api.GoogleApiClient;
+
 public class MainActivity extends AppCompatActivity {
     public static String EXTRA_FULL = "com.acevedo.yitzchak.FULLNAME";
     public static String EXTRA_USER = "com.acevedo.yitzchak.USERNAME";
@@ -20,6 +25,11 @@ public class MainActivity extends AppCompatActivity {
     public static String EXTRA_CONF = "com.acevedo.yitzchak.CONFIRM";
     public static boolean isDeveloper = false;
     public static int numPresses = 0;
+    /**
+     * ATTENTION: This was auto-generated to implement the App Indexing API.
+     * See https://g.co/AppIndexing/AndroidStudio for more information.
+     */
+    private GoogleApiClient client;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,48 +56,47 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
 
-    private static boolean userStatus(String username){
+    private static boolean userStatus(String username) {
         //TODO check username database
-        if (!username.equals("yitzchak")){
-            return true;
-        }
-        else
-            return false;
+        return !username.equals("yitzchak");
     }
 
-    public void ButtonContinue(View view){
-        EditText fullName = (EditText)findViewById(R.id.fullName);
-        EditText username = (EditText)findViewById(R.id.username);
-        EditText password = (EditText)findViewById(R.id.password);
-        EditText confirmP = (EditText)findViewById(R.id.confirmPassword);
+    public void ButtonContinue(View view) {
+        EditText fullName = (EditText) findViewById(R.id.fullName);
+        EditText username = (EditText) findViewById(R.id.username);
+        EditText password = (EditText) findViewById(R.id.password);
+        EditText confirmP = (EditText) findViewById(R.id.confirmPassword);
         String fn, un, pw, cp;
-        pw = " ";
+        pw = null;
         fn = fullName.getText().toString();
         un = username.getText().toString();
         pw = password.getText().toString();
         cp = confirmP.getText().toString();
-        if (userStatus(un)&&pw.equals(cp)&&!pw.equals(" ")){
+        if (userStatus(un) && pw.equals(cp) && !pw.equals(" ")) {
             Intent intent = new Intent(this, HomeScreen.class);
             intent.putExtra(EXTRA_FULL, fn);
             intent.putExtra(EXTRA_USER, un);
             intent.putExtra(EXTRA_PASS, pw);
             intent.putExtra(EXTRA_CONF, cp);
             startActivity(intent);
-        } else if (!userStatus(un)&&!pw.equals(cp)) {
-            TextView userErr = (TextView)findViewById(R.id.userErr);
+        } else if (!userStatus(un) && !pw.equals(cp)) {
+            TextView userErr = (TextView) findViewById(R.id.userErr);
             userErr.setVisibility(View.VISIBLE);
-            TextView passErr = (TextView)findViewById(R.id.passErr);
+            TextView passErr = (TextView) findViewById(R.id.passErr);
             passErr.setVisibility(View.VISIBLE);
-        } else if (!userStatus(un)){
-            TextView userErr = (TextView)findViewById(R.id.userErr);
+        } else if (!userStatus(un)) {
+            TextView userErr = (TextView) findViewById(R.id.userErr);
             userErr.setVisibility(View.VISIBLE);
-        } else if (!pw.equals(cp)){
-            TextView passErr = (TextView)findViewById(R.id.passErr);
+        } else if (!pw.equals(cp)) {
+            TextView passErr = (TextView) findViewById(R.id.passErr);
             passErr.setVisibility(View.VISIBLE);
         } else {
-            TextView userErr = (TextView)findViewById(R.id.userErr);
+            TextView userErr = (TextView) findViewById(R.id.userErr);
             userErr.setVisibility(View.VISIBLE);
         }
     }
@@ -112,5 +121,45 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client.connect();
+        Action viewAction = Action.newAction(
+                Action.TYPE_VIEW, // TODO: choose an action type.
+                "Main Page", // TODO: Define a title for the content shown.
+                // TODO: If you have web page content that matches this app activity's content,
+                // make sure this auto-generated web page URL is correct.
+                // Otherwise, set the URL to null.
+                Uri.parse("http://host/path"),
+                // TODO: Make sure this auto-generated app deep link URI is correct.
+                Uri.parse("android-app://com.acevedo.yitzchak.f0app/http/host/path")
+        );
+        AppIndex.AppIndexApi.start(client, viewAction);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        Action viewAction = Action.newAction(
+                Action.TYPE_VIEW, // TODO: choose an action type.
+                "Main Page", // TODO: Define a title for the content shown.
+                // TODO: If you have web page content that matches this app activity's content,
+                // make sure this auto-generated web page URL is correct.
+                // Otherwise, set the URL to null.
+                Uri.parse("http://host/path"),
+                // TODO: Make sure this auto-generated app deep link URI is correct.
+                Uri.parse("android-app://com.acevedo.yitzchak.f0app/http/host/path")
+        );
+        AppIndex.AppIndexApi.end(client, viewAction);
+        client.disconnect();
     }
 }
